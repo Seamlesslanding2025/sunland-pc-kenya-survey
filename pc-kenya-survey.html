@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Office Search for Institutional Client — 2026 | Sunland Real Estates</title>
+<style>
+  :root {
+    --navy:   #1a3c5e;
+    --gold:   #c9a84c;
+    --green:  #1e7e44;
+    --red:    #c0392b;
+    --amber:  #d68910;
+    --light:  #f4f6f9;
+    --border: #d0d8e4;
+    --text:   #1a2433;
+    --muted:  #6b7a8d;
+    --white:  #ffffff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--light);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── Header ── */
+  .site-header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,.25);
+  }
+  .site-header .logo { font-size: 18px; font-weight: 700; letter-spacing: .5px; }
+  .site-header .logo span { color: var(--gold); }
+  .site-header .badge {
+    margin-left: auto;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: .5px;
+  }
+
+  /* ── Page wrapper ── */
+  .page-wrap { max-width: 860px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  /* ── Page title ── */
+  .page-title {
+    background: var(--white);
+    border-left: 5px solid var(--gold);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+  .page-title h1 { font-size: 20px; color: var(--navy); font-weight: 700; }
+  .page-title .sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    background: var(--white);
+    border-radius: 6px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+  }
+  .progress-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; display: flex; justify-content: space-between; }
+  .progress-bar { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--green); border-radius: 4px; transition: width .4s ease; width: 0%; }
+
+  /* ── Budget calculator ── */
+  .budget-panel {
+    background: var(--navy);
+    color: var(--white);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+  .budget-panel h3 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; color: var(--gold); }
+  .budget-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; }
+  .budget-row { display: flex; justify-content: space-between; align-items: center; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,.1); font-size: 13px; }
+  .budget-row.total { border-bottom: none; border-top: 2px solid var(--gold); margin-top: 4px; padding-top: 8px; font-weight: 700; font-size: 15px; }
+  .budget-row .val { font-weight: 600; }
+  .budget-ceiling { margin-top: 10px; font-size: 12px; color: rgba(255,255,255,.7); text-align: right; }
+  .budget-ceiling span { color: var(--gold); font-weight: 700; }
+
+  /* ── Filter status banner ── */
+  .filter-banner {
+    border-radius: 6px;
+    padding: 12px 18px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .filter-banner.blocked  { background: #fdf2f2; border: 1px solid #f5c6c6; color: var(--red); }
+  .filter-banner.unlocked { background: #edfaf3; border: 1px solid #a9e4c2; color: var(--green); }
+  .filter-banner.warning  { background: #fffbea; border: 1px solid #f5e17a; color: var(--amber); }
+
+  /* ── Section card ── */
+  .section-card {
+    background: var(--white);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    overflow: hidden;
+    opacity: .45;
+    pointer-events: none;
+    transition: opacity .3s;
+  }
+  .section-card.unlocked { opacity: 1; pointer-events: auto; }
+  .section-card.always-on { opacity: 1; pointer-events: auto; }
+  .section-head {
+    background: var(--navy);
+    color: var(--white);
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-head .snum {
+    background: var(--gold);
+    color: var(--navy);
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .section-body { padding: 20px; }
+
+  /* ── Field group ── */
+  .field-group { margin-bottom: 18px; }
+  .field-group:last-child { margin-bottom: 0; }
+
+  label.field-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 6px;
+  }
+  label.field-label .req { color: var(--red); }
+
+  /* tooltip */
+  .tip-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px;
+    background: var(--border);
+    color: var(--muted);
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .tip-icon:hover .tip-text { display: block; }
+  .tip-text {
+    display: none;
+    position: absolute;
+    left: 22px; top: -4px;
+    background: var(--navy);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 400;
+    padding: 8px 12px;
+    border-radius: 6px;
+    width: 260px;
+    z-index: 200;
+    line-height: 1.5;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,.2);
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="date"],
+  input[type="tel"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--white);
+    transition: border-color .2s, box-shadow .2s;
+    font-family: inherit;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(26,60,94,.1);
+  }
+  input.error, select.error, textarea.error { border-color: var(--red); }
+
+  .field-hint { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .field-error { font-size: 11px; color: var(--red); margin-top: 4px; display: none; }
+  .field-error.visible { display: block; }
+
+  /* radio / checkbox groups */
+  .radio-group, .check-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .radio-opt, .check-opt {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--light);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 7px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all .15s;
+    user-select: none;
+  }
+  .radio-opt:hover, .check-opt:hover { border-color: var(--navy); background: #eef3f9; }
+  .radio-opt input, .check-opt input { accent-color: var(--navy); }
+
+  /* two-col layout for some fields */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media(max-width:600px){ .two-col { grid-template-columns: 1fr; } .budget-grid { grid-template-columns: 1fr; } }
+
+  /* nested conditional block */
+  .conditional-block {
+    background: #f8f9fb;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-top: 10px;
+    display: none;
+  }
+  .conditional-block.visible { display: block; }
+  .conditional-block .block-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+
+  /* hard filter fail inline */
+  .hard-fail {
+    background: #fdf2f2;
+    border: 1px solid #f5c6c6;
+    color: var(--red);
+    border-radius: 5px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 6px;
+    display: none;
+  }
+  .hard-fail.visible { display: block; }
+
+  /* mandate block alert */
+  .mandate-alert {
+    background: #fdf2f2;
+    border: 1px solid #f5c6c6;
+    color: var(--red);
+    border-radius: 5px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 8px;
+    display: none;
+  }
+  .mandate-alert.visible { display: block; }
+
+  /* ── Submit area ── */
+  .submit-area {
+    background: var(--white);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    text-align: center;
+  }
+  .btn-submit {
+    background: var(--navy);
+    color: var(--white);
+    border: none;
+    padding: 14px 40px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+    letter-spacing: .3px;
+  }
+  .btn-submit:hover:not(:disabled) { background: #0f2540; transform: translateY(-1px); }
+  .btn-submit:disabled { background: var(--muted); cursor: not-allowed; transform: none; }
+
+  /* ── Submission states ── */
+  #submit-status { margin-top: 16px; font-size: 13px; display: none; }
+  .status-saving { color: var(--amber); font-weight: 600; }
+  .status-success {
+    background: #edfaf3;
+    border: 1px solid #a9e4c2;
+    color: var(--green);
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-weight: 600;
+  }
+  .status-error {
+    background: #fdf2f2;
+    border: 1px solid #f5c6c6;
+    color: var(--red);
+    border-radius: 6px;
+    padding: 14px 18px;
+    font-weight: 600;
+  }
+
+  /* info tip box */
+  .info-box {
+    background: #eef3f9;
+    border-left: 4px solid var(--navy);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--navy);
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">Sunland <span>Real Estates</span> Ltd</div>
+  <div class="badge">Tool 1.1</div>
+</header>
+
+<div class="page-wrap">
+
+  <div class="page-title">
+    <h1>Office Search for Institutional Client — 2026</h1>
+    <div class="sub">Property Data Collection Form &nbsp;·&nbsp; Fields marked * are required &nbsp;·&nbsp; Properties failing hard filters cannot be submitted.</div>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Form Completion</span><span id="progress-pct">0%</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+
+  <!-- Budget Calculator -->
+  <div class="budget-panel">
+    <h3>Live Budget Calculator</h3>
+    <div class="budget-grid">
+      <div class="budget-row"><span>Rent (KES/mo)</span><span class="val" id="calc-rent">—</span></div>
+      <div class="budget-row"><span>S/C (KES/mo)</span><span class="val" id="calc-sc">—</span></div>
+      <div class="budget-row"><span>Parking (KES/mo)</span><span class="val" id="calc-park">—</span></div>
+      <div class="budget-row"><span>VAT @ 16%</span><span class="val" id="calc-vat">—</span></div>
+    </div>
+    <div class="budget-row total"><span>TOTAL</span><span class="val" id="calc-total">—</span></div>
+    <div class="budget-ceiling">Budget Ceiling <span>KES 500,000</span></div>
+  </div>
+
+  <!-- Filter status -->
+  <div class="filter-banner blocked" id="filter-banner">
+    ⛔ Complete Section 2 first — Sections 1, 3, 4 and 5 unlock once budget and parking filters pass.
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SECTION 2 — Financial Details (always on, start here)
+  ══════════════════════════════════════════════════════════ -->
+  <div class="section-card always-on">
+    <div class="section-head"><div class="snum">2</div>Section 2 — Financial Details <em style="font-weight:400;font-size:12px;margin-left:6px;">(Start Here)</em></div>
+    <div class="section-body">
+
+      <div class="info-box">⚠️ Start here. There is no value in recording building details for a property that does not meet the budget ceiling (KES 500,000/mo) or the minimum parking requirement (10 slots). Sections 1, 3, 4 and 5 unlock automatically once Section 2 passes both filters.</div>
+
+      <div class="two-col">
+        <div class="field-group">
+          <label class="field-label">GLA Available (sq ft) <span class="req">*</span>
+            <span class="tip-icon">?<span class="tip-text">Gross Lettable Area — the net floor space for the tenant's exclusive use in sq ft. Excludes lobbies, corridors, and stairwells.</span></span>
+          </label>
+          <input type="number" id="gla" min="0" placeholder="e.g. 2500">
+          <div class="field-error" id="err-gla">GLA is required.</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Rent per sq ft (KES) <span class="req">*</span>
+            <span class="tip-icon">?<span class="tip-text">Monthly rent per sq ft of GLA, excluding VAT. VAT at 16% is added automatically in the calculator.</span></span>
+          </label>
+          <input type="number" id="rentPerSqFt" min="0" placeholder="e.g. 110">
+          <div class="field-error" id="err-rent">Rent per sq ft is required.</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="field-group">
+          <label class="field-label">S/C per sq ft (KES) <span class="req">*</span>
+            <span class="tip-icon">?<span class="tip-text">Service Charge — monthly fee per sq ft for building maintenance, cleaning, security, lifts, and common areas. Enter 0 if bundled into the rent.</span></span>
+          </label>
+          <input type="number" id="scPerSqFt" min="0" placeholder="e.g. 20">
+          <div class="field-error" id="err-sc">S/C is required (enter 0 if included in rent).</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Total Parking Slots for This Space <span class="req">*</span>
+            <span class="tip-icon">?<span class="tip-text">Dedicated slots for this tenancy only — not the building total. Minimum required: 10.</span></span>
+          </label>
+          <input type="number" id="parkingSlots" min="0" placeholder="e.g. 12">
+          <div class="hard-fail" id="fail-parking">⛔ Hard Filter Failed: Minimum 10 dedicated parking slots required.</div>
+          <div class="field-error" id="err-slots">Number of parking slots is required.</div>
+        </div>
+      </div>
+
+      <!-- Parking Arrangement -->
+      <div class="field-group">
+        <label class="field-label">Parking Arrangement <span class="req">*</span>
+          <span class="tip-icon">?<span class="tip-text">Select how parking is charged. "Mixed" means some slots are complimentary with the lease; additional slots cost extra per month.</span></span>
+        </label>
+        <div class="radio-group" id="parkingArrangement">
+          <label class="radio-opt"><input type="radio" name="parkingArrangement" value="Included in Rent"> Included in Rent</label>
+          <label class="radio-opt"><input type="radio" name="parkingArrangement" value="Charged Separately"> Charged Separately</label>
+          <label class="radio-opt"><input type="radio" name="parkingArrangement" value="Mixed"> Mixed (Some Included, Extra Charged)</label>
+        </div>
+        <div class="field-error" id="err-parking-arr">Parking arrangement is required.</div>
+
+        <!-- Conditional: slot detail (shown when Charged Separately or Mixed) -->
+        <div class="conditional-block" id="block-slots">
+          <div class="block-title">Slot Cost Detail</div>
+          <div class="two-col">
+            <div class="field-group">
+              <label class="field-label">Complimentary Slots in Lease
+                <span class="tip-icon">?<span class="tip-text">Slots provided at no charge as part of the lease. Enter 0 if none.</span></span>
+              </label>
+              <input type="number" id="compSlots" min="0" value="0" placeholder="0">
+            </div>
+            <div class="field-group">
+              <label class="field-label">Parking Fee per Slot (KES/mo)
+                <span class="tip-icon">?<span class="tip-text">Monthly cost per slot above the complimentary allocation.</span></span>
+              </label>
+              <input type="number" id="parkingFeePerSlot" min="0" placeholder="e.g. 5000">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SECTION 1 — Building Identity
+  ══════════════════════════════════════════════════════════ -->
+  <div class="section-card" id="sec1">
+    <div class="section-head"><div class="snum">1</div>Section 1 — Building Identity &amp; Location</div>
+    <div class="section-body">
+
+      <div class="two-col">
+        <div class="field-group">
+          <label class="field-label">Building Name <span class="req">*</span>
+            <span class="tip-icon">?<span class="tip-text">The official name of the building, e.g. "One Padmore Place" or "Delta Corner Annex".</span></span>
+          </label>
+          <input type="text" id="buildingName" placeholder="e.g. Delta Corner Annex">
+          <div class="field-error" id="err-bname">Building name is required.</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Street / Road</label>
+          <input type="text" id="streetRoad" placeholder="e.g. Lenana Road">
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="field-group">
+          <label class="field-label">Location / Node <span class="req">*</span>
+            <span class="tip-icon">?<span class="tip-text">The commercial district. Only Upper Hill and Kilimani are in scope for this assignment.</span></span>
+          </label>
+          <select id="node">
+            <option value="">— Select Node —</option>
+            <option value="Upper Hill">Upper Hill</option>
+            <option value="Kilimani">Kilimani</option>
+          </select>
+          <div class="field-error" id="err-node">Please select a location node.</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Building Type <span class="req">*</span>
+            <span class="tip-icon">?<span class="tip-text">Grade A = premium modern building with full facilities and professional management. Grade B = functional but older or less premium. Mixed Use = offices combined with retail or residential. Serviced Office = a fully managed workspace where the operator provides furniture, internet, reception, and utilities under a single monthly fee — tenant occupies immediately with no setup costs. Other = describe below.</span></span>
+          </label>
+          <select id="buildingType" onchange="toggleBuildingTypeOther()">
+            <option value="">— Select —</option>
+            <option value="Grade A Office">Grade A Office</option>
+            <option value="Grade B Office">Grade B Office</option>
+            <option value="Mixed Use">Mixed Use</option>
+            <option value="Serviced Office">Serviced Office</option>
+            <option value="Other">Other</option>
+          </select>
+          <div class="field-error" id="err-btype">Please select building type.</div>
+          <div class="conditional-block" id="block-btype-other">
+            <div class="block-title">Specify Building Type</div>
+            <input type="text" id="buildingTypeOther" placeholder="Describe the building type…">
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Fit-Out Status
+          <span class="tip-icon">?<span class="tip-text">Plug-and-play = fully fitted, furniture and cabling in place, ready to occupy on day one. Partially Fitted = some fit-out done but tenant completes the rest. Cat A = developer has installed raised floors, suspended ceilings, basic lighting, and M&amp;E rough-ins (M&amp;E = mechanical and electrical conduits, ducts, and wiring stubs — imagine the "skeleton" behind the walls and ceiling, but no walls, furniture, or finishing yet). Shell &amp; Core = bare concrete slab, no ceilings, no finishes — tenant does everything from scratch.</span></span>
+        </label>
+        <select id="fitOutStatus">
+          <option value="">— Select —</option>
+          <option value="Plug-and-play (Fully Fitted)">Plug-and-play (Fully Fitted)</option>
+          <option value="Partially Fitted">Partially Fitted</option>
+          <option value="Cat A (Raised floors, ceilings, M&E rough-in)">Cat A (Raised floors, ceilings, M&amp;E rough-in)</option>
+          <option value="Shell & Core (Bare)">Shell &amp; Core (Bare)</option>
+        </select>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SECTION 3 — Technical Infrastructure
+  ══════════════════════════════════════════════════════════ -->
+  <div class="section-card" id="sec3">
+    <div class="section-head"><div class="snum">3</div>Section 3 — Technical Infrastructure</div>
+    <div class="section-body">
+
+      <div class="field-group">
+        <label class="field-label">Power Backup <span class="req">*</span>
+          <span class="tip-icon">?<span class="tip-text">Full Generator = 100% backup for all floors and lifts. Partial = covers common areas and some floors. Solar + Generator = hybrid system. None = relies on Kenya Power grid only.</span></span>
+        </label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="powerBackup" value="Full Generator"> Full Generator</label>
+          <label class="radio-opt"><input type="radio" name="powerBackup" value="Partial Backup"> Partial Backup</label>
+          <label class="radio-opt"><input type="radio" name="powerBackup" value="Solar + Generator"> Solar + Generator</label>
+          <label class="radio-opt"><input type="radio" name="powerBackup" value="None"> None</label>
+        </div>
+        <div class="field-error" id="err-power">Power backup status is required.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Security Features <span class="req">*</span>
+          <span class="tip-icon">?<span class="tip-text">Select all that apply. Access Control = key card or biometric entry. Boom Gate = vehicle access barrier.</span></span>
+        </label>
+        <div class="check-group" id="securityFeatures">
+          <label class="check-opt"><input type="checkbox" name="securityFeatures" value="CCTV"> CCTV</label>
+          <label class="check-opt"><input type="checkbox" name="securityFeatures" value="Access Control"> Access Control</label>
+          <label class="check-opt"><input type="checkbox" name="securityFeatures" value="Manned 24/7"> Manned 24/7</label>
+          <label class="check-opt"><input type="checkbox" name="securityFeatures" value="Perimeter Wall"> Perimeter Wall</label>
+          <label class="check-opt"><input type="checkbox" name="securityFeatures" value="Boom Gate"> Boom Gate</label>
+          <label class="check-opt"><input type="checkbox" name="securityFeatures" value="Intercom"> Intercom</label>
+        </div>
+        <div class="field-error" id="err-security">Select at least one security feature.</div>
+      </div>
+
+      <div class="two-col">
+        <div class="field-group">
+          <label class="field-label">Internet / Fibre Connectivity <span class="req">*</span>
+            <span class="tip-icon">?<span class="tip-text">Terminated on-site = fibre cable already in the building. Available on street = fibre is nearby but not yet installed inside. Wireless/WiMAX = line-of-sight radio link.</span></span>
+          </label>
+          <select id="fibreAvailable">
+            <option value="">— Select —</option>
+            <option value="Fibre (Terminated on-site)">Fibre (Terminated on-site)</option>
+            <option value="Fibre (Available on street)">Fibre (Available on street)</option>
+            <option value="Wireless / WiMAX">Wireless / WiMAX</option>
+            <option value="None">None</option>
+          </select>
+          <div class="field-error" id="err-fibre">Internet connectivity is required.</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Water Supply <span class="req">*</span>
+            <span class="tip-icon">?<span class="tip-text">Borehole = on-site underground well. Tank/Bowser = stored water delivered by truck — least reliable option.</span></span>
+          </label>
+          <select id="waterSupply">
+            <option value="">— Select —</option>
+            <option value="County Supply + Borehole">County Supply + Borehole</option>
+            <option value="County Supply Only">County Supply Only</option>
+            <option value="Borehole Only">Borehole Only</option>
+            <option value="Storage Tank / Bowser">Storage Tank / Bowser</option>
+          </select>
+          <div class="field-error" id="err-water">Water supply source is required.</div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Lift / Elevator Status <span class="req">*</span>
+          <span class="tip-icon">?<span class="tip-text">Confirm whether lifts are working and have a current maintenance certificate.</span></span>
+        </label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="liftStatus" value="Fully Operational"> Fully Operational</label>
+          <label class="radio-opt"><input type="radio" name="liftStatus" value="Partially Working"> Partially Working</label>
+          <label class="radio-opt"><input type="radio" name="liftStatus" value="None / Ground Floor"> None / Ground Floor</label>
+        </div>
+        <div class="field-error" id="err-lift">Lift status is required.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Additional Infrastructure Notes</label>
+        <textarea id="infraNotes" rows="2" placeholder="Include any detail that helps assess the building's technical suitability."></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SECTION 4 — Contact Details, Commission & Mandate
+  ══════════════════════════════════════════════════════════ -->
+  <div class="section-card" id="sec4">
+    <div class="section-head"><div class="snum">4</div>Section 4 — Contact Details &amp; Commission</div>
+    <div class="section-body">
+
+      <div class="two-col">
+        <div class="field-group">
+          <label class="field-label">Contact Name <span class="req">*</span></label>
+          <input type="text" id="ownerAgentName" placeholder="Full name">
+          <div class="field-error" id="err-cname">Contact name is required.</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Contact Role <span class="req">*</span></label>
+          <select id="contactRole" onchange="toggleMandateBlock()">
+            <option value="">— Select Role —</option>
+            <option value="Landlord / Property Owner">Landlord / Property Owner</option>
+            <option value="Property Manager">Property Manager</option>
+            <option value="Letting Agent / Broker">Letting Agent / Broker</option>
+          </select>
+          <div class="field-error" id="err-crole">Contact role is required.</div>
+        </div>
+      </div>
+
+      <!-- Agent mandate — conditional -->
+      <div class="conditional-block" id="block-mandate">
+        <div class="block-title">Agent Mandate Verification</div>
+        <label class="field-label">Does this agent have a written mandate from the Landlord? <span class="req">*</span>
+          <span class="tip-icon">?<span class="tip-text">A mandate is written authority from the property owner authorising the agent to market and negotiate on their behalf. Without it, the agent cannot legally commit to terms.</span></span>
+        </label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="agentMandate" value="Yes — Written Mandate" onchange="checkMandate()"> Yes — Written Mandate</label>
+          <label class="radio-opt"><input type="radio" name="agentMandate" value="Verbal Only" onchange="checkMandate()"> Verbal Only</label>
+          <label class="radio-opt"><input type="radio" name="agentMandate" value="No Mandate" onchange="checkMandate()"> No Mandate</label>
+        </div>
+        <div class="mandate-alert" id="mandate-alert">⛔ A written mandate is required before proceeding. Please obtain written authority from the Landlord or contact them directly.</div>
+        <div class="field-error" id="err-mandate">Mandate status is required when contact is an agent.</div>
+      </div>
+
+      <div class="two-col">
+        <div class="field-group">
+          <label class="field-label">Phone Number <span class="req">*</span></label>
+          <input type="tel" id="phone" placeholder="+254 7XX XXX XXX">
+          <div class="field-error" id="err-phone">Phone number is required.</div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Email Address</label>
+          <input type="email" id="email" placeholder="email@example.com">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Earliest Available Viewing Date
+          <span class="tip-icon">?<span class="tip-text">Enter a specific date or describe availability, e.g. "Any weekday after 9am".</span></span>
+        </label>
+        <input type="date" id="earliestViewing">
+      </div>
+
+      <div class="two-col">
+        <div class="field-group">
+          <label class="field-label">Commission Payable
+            <span class="tip-icon">?<span class="tip-text">The agreed letting commission. Industry standard in Nairobi is one month's gross rent. Enter amount, percentage, or note if subject to negotiation.</span></span>
+          </label>
+          <input type="text" id="commission" placeholder="e.g. One month's gross rent">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Commission — To Be Paid By</label>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="commissionPaidBy" value="Landlord"> Landlord</label>
+            <label class="radio-opt"><input type="radio" name="commissionPaidBy" value="Tenant"> Tenant</label>
+            <label class="radio-opt"><input type="radio" name="commissionPaidBy" value="Split 50/50"> Split 50/50</label>
+            <label class="radio-opt"><input type="radio" name="commissionPaidBy" value="TBD"> TBD</label>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       SECTION 5 — Sourcing Attribution
+  ══════════════════════════════════════════════════════════ -->
+  <div class="section-card" id="sec5">
+    <div class="section-head"><div class="snum">5</div>Section 5 — Sourcing Attribution</div>
+    <div class="section-body">
+
+      <div class="field-group">
+        <label class="field-label">Sourcing Partner <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="sourcingPartner" value="Maklen Realtors"> Maklen Realtors</label>
+          <label class="radio-opt"><input type="radio" name="sourcingPartner" value="Seamless Landing Real Estate"> Seamless Landing Real Estate</label>
+          <label class="radio-opt"><input type="radio" name="sourcingPartner" value="Sunland Real Estates Ltd"> Sunland Real Estates Ltd</label>
+        </div>
+        <div class="field-error" id="err-sourcing">Sourcing partner selection is required.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">How Was This Property Identified?
+          <span class="tip-icon">?<span class="tip-text">Select the method used to identify this property. Helps the team track which sourcing channels are most productive.</span></span>
+        </label>
+        <select id="sourcingMethod">
+          <option value="">— Select —</option>
+          <option value="Direct Landlord Relationship">Direct Landlord Relationship</option>
+          <option value="Property Portal (BuyRentKenya, Prop54, etc.)">Property Portal (BuyRentKenya, Prop54, etc.)</option>
+          <option value="Physical Drive / Field Survey">Physical Drive / Field Survey</option>
+          <option value="Referral / Network">Referral / Network</option>
+          <option value="Other Agent Introduction">Other Agent Introduction</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Property Portal URL</label>
+        <input type="text" id="portalURL" placeholder="Paste listing link if found on a portal">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Confirmed in Target Space?
+          <span class="tip-icon">?<span class="tip-text">The landlord or agent has confirmed the specific floor/unit matching required GLA is currently vacant and available for immediate inspection.</span></span>
+        </label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="confirmedInSpace" value="Yes — Available Now"> Yes — Available Now</label>
+          <label class="radio-opt"><input type="radio" name="confirmedInSpace" value="Pending Confirmation"> Pending Confirmation</label>
+          <label class="radio-opt"><input type="radio" name="confirmedInSpace" value="No"> No</label>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Additional Notes / Next Steps</label>
+        <textarea id="additionalNotes" rows="3" placeholder="Any remarks, next steps, or follow-up actions."></textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Submit -->
+  <div class="submit-area">
+    <button class="btn-submit" id="btn-submit" onclick="submitForm()">Submit Property Record</button>
+    <div id="submit-status"></div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script>
+const GAS_URL = "https://script.google.com/macros/s/AKfycbwAhe8gzy-2NMAsjdkVBzA5_JQw_n7515kM1PfGcCTLWpbmVALU2yAwKg4PMHAb96Zzuw/exec";
+const BUDGET_CEILING = 500000;
+const MIN_PARKING    = 10;
+
+// ── Section unlock state ──
+let filtersPass = false;
+
+function val(id)   { const el = document.getElementById(id); return el ? el.value.trim() : ""; }
+function radio(nm) { const el = document.querySelector(`input[name="${nm}"]:checked`); return el ? el.value : ""; }
+function checks(nm){ return [...document.querySelectorAll(`input[name="${nm}"]:checked`)].map(e=>e.value); }
+function fmt(n)    { return isNaN(n)||n===0 ? "—" : "KES " + Math.round(n).toLocaleString(); }
+
+function calcBudget() {
+  const gla   = parseFloat(val("gla"))            || 0;
+  const rent  = parseFloat(val("rentPerSqFt"))    || 0;
+  const sc    = parseFloat(val("scPerSqFt"))      || 0;
+  const slots = parseInt(val("parkingSlots"))     || 0;
+  const comp  = parseInt(val("compSlots"))        || 0;
+  const fee   = parseFloat(val("parkingFeePerSlot"))|| 0;
+
+  const arr = radio("parkingArrangement");
+  const chargedSlots = (arr === "Included in Rent") ? 0 : Math.max(0, slots - comp);
+
+  const monthlyRent  = gla * rent;
+  const monthlySC    = gla * sc;
+  const parkingTotal = chargedSlots * fee;
+  const vat          = (monthlyRent + monthlySC + parkingTotal) * 0.16;
+  const total        = monthlyRent + monthlySC + parkingTotal + vat;
+
+  document.getElementById("calc-rent").textContent  = fmt(monthlyRent);
+  document.getElementById("calc-sc").textContent    = fmt(monthlySC);
+  document.getElementById("calc-park").textContent  = fmt(parkingTotal);
+  document.getElementById("calc-vat").textContent   = fmt(vat);
+  document.getElementById("calc-total").textContent = fmt(total);
+
+  // Hard filter: parking
+  const slotsOk  = slots >= MIN_PARKING;
+  const budgetOk = total <= BUDGET_CEILING && total > 0;
+
+  document.getElementById("fail-parking").classList.toggle("visible", slots > 0 && !slotsOk);
+
+  // Unlock sections
+  filtersPass = slotsOk && budgetOk;
+  const banner = document.getElementById("filter-banner");
+
+  if (!gla && !rent && !sc && !slots) {
+    banner.className = "filter-banner warning";
+    banner.textContent = "⚠️ Complete Section 2 first — fill in GLA, rent, S/C, and parking to see your budget and unlock the rest of the form.";
+    unlockSections(false);
+    return;
+  }
+  if (!slotsOk) {
+    banner.className = "filter-banner blocked";
+    banner.textContent = "⛔ Hard Filter Failed — minimum 10 dedicated parking slots required. This property cannot be submitted.";
+    unlockSections(false); return;
+  }
+  if (total > BUDGET_CEILING) {
+    banner.className = "filter-banner blocked";
+    banner.textContent = `⛔ Over Budget — Total KES ${Math.round(total).toLocaleString()} exceeds the KES 500,000 ceiling. This property cannot be submitted.`;
+    unlockSections(false); return;
+  }
+  banner.className = "filter-banner unlocked";
+  banner.textContent = `✅ Filters Passed — Total KES ${Math.round(total).toLocaleString()} is within budget and parking requirement met. Complete the remaining sections.`;
+  unlockSections(true);
+}
+
+function unlockSections(on) {
+  ["sec1","sec3","sec4","sec5"].forEach(id => {
+    const el = document.getElementById(id);
+    if (on) el.classList.add("unlocked");
+    else el.classList.remove("unlocked");
+  });
+  document.getElementById("btn-submit").disabled = !on;
+  updateProgress();
+}
+
+// ── Parking arrangement conditional ──
+document.querySelectorAll("input[name='parkingArrangement']").forEach(r => {
+  r.addEventListener("change", () => {
+    const v = r.value;
+    const show = (v === "Charged Separately" || v === "Mixed");
+    document.getElementById("block-slots").classList.toggle("visible", show);
+    calcBudget();
+  });
+});
+
+function toggleBuildingTypeOther() {
+  const v = val("buildingType");
+  document.getElementById("block-btype-other").classList.toggle("visible", v === "Other");
+}
+
+function toggleMandateBlock() {
+  const v = val("contactRole");
+  document.getElementById("block-mandate").classList.toggle("visible", v === "Letting Agent / Broker");
+}
+
+function checkMandate() {
+  const v = radio("agentMandate");
+  document.getElementById("mandate-alert").classList.toggle("visible", v === "Verbal Only" || v === "No Mandate");
+}
+
+// ── Progress ──
+function updateProgress() {
+  const required = ["gla","rentPerSqFt","scPerSqFt","parkingSlots","buildingName","node","ownerAgentName","phone"];
+  const radios   = ["powerBackup","sourcingPartner"];
+  let done = 0, total = required.length + radios.length + 1; // +1 for security checkboxes
+  required.forEach(id => { if (val(id)) done++; });
+  radios.forEach(nm => { if (radio(nm)) done++; });
+  if (checks("securityFeatures").length) done++;
+  const pct = Math.round((done/total)*100);
+  document.getElementById("progress-fill").style.width = pct + "%";
+  document.getElementById("progress-pct").textContent  = pct + "%";
+}
+
+// ── Live listeners ──
+["gla","rentPerSqFt","scPerSqFt","parkingSlots","compSlots","parkingFeePerSlot"].forEach(id => {
+  const el = document.getElementById(id);
+  if (el) el.addEventListener("input", calcBudget);
+});
+document.querySelectorAll("input, select, textarea").forEach(el => {
+  el.addEventListener("change", updateProgress);
+  el.addEventListener("input",  updateProgress);
+});
+
+// ── Validate ──
+function showErr(id, show) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle("visible", show);
+}
+function markErr(id, bad) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle("error", bad);
+}
+
+function validate() {
+  let ok = true;
+
+  const gla = val("gla");
+  markErr("gla", !gla); showErr("err-gla", !gla); if (!gla) ok=false;
+
+  const rent = val("rentPerSqFt");
+  markErr("rentPerSqFt", !rent); showErr("err-rent", !rent); if (!rent) ok=false;
+
+  const sc = val("scPerSqFt");
+  markErr("scPerSqFt", !sc && sc!=="0"); showErr("err-sc", !sc && sc!=="0"); if (!sc && sc!=="0") ok=false;
+
+  const slots = val("parkingSlots");
+  markErr("parkingSlots", !slots); showErr("err-slots", !slots); if (!slots) ok=false;
+
+  const parkArr = radio("parkingArrangement");
+  showErr("err-parking-arr", !parkArr); if (!parkArr) ok=false;
+
+  const bname = val("buildingName");
+  markErr("buildingName", !bname); showErr("err-bname", !bname); if (!bname) ok=false;
+
+  const node = val("node");
+  markErr("node", !node); showErr("err-node", !node); if (!node) ok=false;
+
+  const btype = val("buildingType");
+  markErr("buildingType", !btype); showErr("err-btype", !btype); if (!btype) ok=false;
+
+  const power = radio("powerBackup");
+  showErr("err-power", !power); if (!power) ok=false;
+
+  const sec = checks("securityFeatures");
+  showErr("err-security", !sec.length); if (!sec.length) ok=false;
+
+  const fibre = val("fibreAvailable");
+  markErr("fibreAvailable", !fibre); showErr("err-fibre", !fibre); if (!fibre) ok=false;
+
+  const water = val("waterSupply");
+  markErr("waterSupply", !water); showErr("err-water", !water); if (!water) ok=false;
+
+  const lift = radio("liftStatus");
+  showErr("err-lift", !lift); if (!lift) ok=false;
+
+  const cname = val("ownerAgentName");
+  markErr("ownerAgentName", !cname); showErr("err-cname", !cname); if (!cname) ok=false;
+
+  const crole = val("contactRole");
+  markErr("contactRole", !crole); showErr("err-crole", !crole); if (!crole) ok=false;
+
+  if (crole === "Letting Agent / Broker") {
+    const mandate = radio("agentMandate");
+    showErr("err-mandate", !mandate); if (!mandate) ok=false;
+    if (mandate === "Verbal Only" || mandate === "No Mandate") ok=false;
+  }
+
+  const phone = val("phone");
+  markErr("phone", !phone); showErr("err-phone", !phone); if (!phone) ok=false;
+
+  const sourcing = radio("sourcingPartner");
+  showErr("err-sourcing", !sourcing); if (!sourcing) ok=false;
+
+  return ok;
+}
+
+// ── Submit ──
+function submitForm() {
+  if (!filtersPass) return;
+  if (!validate()) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+
+  const btn    = document.getElementById("btn-submit");
+  const status = document.getElementById("submit-status");
+
+  btn.disabled = true;
+  status.style.display = "block";
+  status.innerHTML = '<span class="status-saving">⏳ Saving record…</span>';
+
+  const payload = {
+    gla:               parseFloat(val("gla")),
+    rentPerSqFt:       parseFloat(val("rentPerSqFt")),
+    scPerSqFt:         parseFloat(val("scPerSqFt")),
+    parkingSlots:      parseInt(val("parkingSlots")),
+    compSlots:         parseInt(val("compSlots")) || 0,
+    parkingFeePerSlot: parseFloat(val("parkingFeePerSlot")) || 0,
+    parkingArrangement:radio("parkingArrangement"),
+    currency:          "KES",
+    buildingName:      val("buildingName"),
+    streetRoad:        val("streetRoad"),
+    node:              val("node"),
+    buildingType:      val("buildingType") === "Other" ? (val("buildingTypeOther") || "Other") : val("buildingType"),
+    fitOutStatus:      val("fitOutStatus"),
+    powerBackup:       radio("powerBackup"),
+    securityFeatures:  checks("securityFeatures"),
+    fibreAvailable:    val("fibreAvailable"),
+    waterSupply:       val("waterSupply"),
+    liftStatus:        radio("liftStatus"),
+    infraNotes:        val("infraNotes"),
+    ownerAgentName:    val("ownerAgentName"),
+    contactRole:       val("contactRole"),
+    phone:             val("phone"),
+    email:             val("email"),
+    earliestViewing:   val("earliestViewing"),
+    commission:        val("commission"),
+    commissionPaidBy:  radio("commissionPaidBy"),
+    agentMandate:      radio("agentMandate"),
+    sourcingPartner:   radio("sourcingPartner"),
+    sourcingMethod:    val("sourcingMethod"),
+    portalURL:         val("portalURL"),
+    confirmedInSpace:  radio("confirmedInSpace"),
+    additionalNotes:   val("additionalNotes"),
+  };
+
+  fetch(GAS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain" },
+    body: JSON.stringify(payload)
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.status === "success") {
+      status.innerHTML = '<div class="status-success">✅ Record submitted successfully. Thank you.</div>';
+    } else {
+      throw new Error(data.message || "Unknown error");
+    }
+  })
+  .catch(err => {
+    status.innerHTML = `<div class="status-error">⚠️ Submission failed — please try again or contact the team.<br><small>${err.message}</small></div>`;
+    btn.disabled = false;
+  });
+}
+
+// ── Init ──
+document.getElementById("btn-submit").disabled = true;
+calcBudget();
+</script>
+</body>
+</html>
