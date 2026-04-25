@@ -119,6 +119,7 @@
                     <div class="field-error" id="err-gla">GLA is required.</div>
                 </div>
                 <div class="field-group">
+                    <!-- BUG 6 FIX: label uses id span so JS can update it on currency switch -->
                     <label class="field-label">Rent per sq ft (<span id="lbl-rent-ccy">KES</span>) <span class="req">*</span></label>
                     <input type="number" id="rentPerSqFt" step="0.01" placeholder="e.g. 110">
                     <div class="field-error" id="err-rent">Rent is required.</div>
@@ -143,6 +144,7 @@
             </div>
             <div class="two-col">
                 <div class="field-group">
+                    <!-- BUG 6 FIX: label uses id span so JS can update it on currency switch -->
                     <label class="field-label">Parking Fee per Slot (<span id="lbl-park-ccy">KES</span>) <span class="req">*</span></label>
                     <input type="number" id="parkingFeePerSlot" placeholder="e.g. 5000">
                     <div class="field-error" id="err-parkfee">Parking fee is required.</div>
@@ -166,8 +168,9 @@
                     </select>
                 </div>
                 <div class="field-group" id="group-usd" style="display:none;">
-                    <label class="field-label">USD Exchange Rate <span class="req">*</span></label>
-                    <input type="number" id="usdRate" placeholder="e.g. 130">
+                    <label class="field-label">USD Exchange Rate Used <span class="req">*</span></label>
+                    <input type="number" id="usdRate" placeholder="e.g. 130" step="0.01">
+                    <div class="field-error" id="err-usdrate">Exchange rate is required when USD is selected.</div>
                 </div>
             </div>
         </div>
@@ -207,7 +210,6 @@
                     </select>
                 </div>
             </div>
-            <!-- NEW CAPACITY FIELDS -->
             <div class="two-col">
                 <div class="field-group">
                     <label class="field-label">Suitability for 25 Staff? <span class="req">*</span>
@@ -329,9 +331,7 @@
     const MIN_PARKING = 10;
     let filtersPass = false;
 
-    // Mobile-friendly Tip Toggle
     function toggleTip(el) {
-        // Close other tips
         document.querySelectorAll('.tip-icon').forEach(icon => {
             if(icon !== el) icon.classList.remove('active');
         });
@@ -341,45 +341,84 @@
     function v(id) { const e=document.getElementById(id); return e?e.value.trim():""; }
     function r(nm) { const e=document.querySelector(`input[name="${nm}"]:checked`); return e?e.value:""; }
 
+    // -------------------------------------------------------------------------
+    // BUG 6 FIX: toggleUSD() now also updates all three currency labels
+    // -------------------------------------------------------------------------
     function toggleUSD() {
-        const ccy = v("currency");
-        document.getElementById("group-usd").style.display = (ccy === "USD") ? "block" : "none";
-        document.getElementById("usd-mode-label").style.display = (ccy === "USD") ? "inline" : "none";
+        const isUSD = v("currency") === "USD";
+        document.getElementById("group-usd").style.display = isUSD ? "block" : "none";
+        document.getElementById("usd-mode-label").style.display = isUSD ? "inline" : "none";
+
+        // Update field labels to reflect active currency
+        const ccy = isUSD ? "USD" : "KES";
+        document.getElementById("lbl-rent-ccy").textContent = ccy;
+        document.getElementById("lbl-sc-ccy").textContent = ccy;
+        document.getElementById("lbl-park-ccy").textContent = ccy;
+
+        // Update placeholders to reflect currency context
+        document.getElementById("rentPerSqFt").placeholder = isUSD ? "e.g. 1.10 (USD/sqft)" : "e.g. 110";
+        document.getElementById("scPerSqFt").placeholder   = isUSD ? "e.g. 0.20 (USD/sqft)" : "e.g. 20";
+        document.getElementById("parkingFeePerSlot").placeholder = isUSD ? "e.g. 38 (USD/slot)" : "e.g. 5000";
+
         calcBudget();
     }
 
+    // -------------------------------------------------------------------------
+    // BUG 2 & 3 FIX: calcBudget now guards against USD mode with no exchange
+    // rate — shows "—" and an amber warning instead of silently using fx=1
+    // -------------------------------------------------------------------------
     function calcBudget() {
-        const fx = (v("currency") === "USD") ? (parseFloat(v("usdRate")) || 1) : 1;
-        const gla = parseFloat(v("gla")) || 0;
-        const rent = (parseFloat(v("rentPerSqFt")) || 0) * fx;
-        const sc = (parseFloat(v("scPerSqFt")) || 0) * fx;
-        const slots = parseInt(v("parkingSlots")) || 0;
-        const fee = (parseFloat(v("parkingFeePerSlot")) || 0) * fx;
-        
-        const mRent = gla * rent;
-        const mSC = gla * sc;
-        const mPark = slots * fee;
-        const total = (mRent + mSC + mPark) * 1.16;
+        const isUSD   = v("currency") === "USD";
+        const rawRate = parseFloat(v("usdRate"));
+        const banner  = document.getElementById("filter-banner");
 
-        document.getElementById("calc-rent").textContent = "KES " + Math.round(mRent).toLocaleString();
-        document.getElementById("calc-sc").textContent = "KES " + Math.round(mSC).toLocaleString();
-        document.getElementById("calc-park").textContent = "KES " + Math.round(mPark).toLocaleString();
-        document.getElementById("calc-vat").textContent = "KES " + Math.round((mRent+mSC+mPark)*0.16).toLocaleString();
+        // GUARD: USD selected but no exchange rate entered yet
+        if (isUSD && (!rawRate || rawRate <= 0)) {
+            ["calc-rent","calc-sc","calc-park","calc-vat","calc-total"].forEach(id => {
+                document.getElementById(id).textContent = "—";
+            });
+            banner.className = "filter-banner warning";
+            banner.textContent = "⚠️ Enter the exchange rate above to see KES budget figures.";
+            unlockSections(false);
+            return;
+        }
+
+        const fx    = isUSD ? rawRate : 1;   // BUG 2 FIX: fx only activates for USD with a valid rate
+        const gla   = parseFloat(v("gla")) || 0;
+        const rent  = (parseFloat(v("rentPerSqFt")) || 0) * fx;
+        const sc    = (parseFloat(v("scPerSqFt")) || 0) * fx;
+        const slots = parseInt(v("parkingSlots")) || 0;
+        const fee   = (parseFloat(v("parkingFeePerSlot")) || 0) * fx;
+
+        const mRent  = gla * rent;
+        const mSC    = gla * sc;
+        const mPark  = slots * fee;
+        const subTotal = mRent + mSC + mPark;
+        const vat    = subTotal * 0.16;
+        const total  = subTotal + vat;
+
+        document.getElementById("calc-rent").textContent  = "KES " + Math.round(mRent).toLocaleString();
+        document.getElementById("calc-sc").textContent    = "KES " + Math.round(mSC).toLocaleString();
+        document.getElementById("calc-park").textContent  = "KES " + Math.round(mPark).toLocaleString();
+        document.getElementById("calc-vat").textContent   = "KES " + Math.round(vat).toLocaleString();
         document.getElementById("calc-total").textContent = "KES " + Math.round(total).toLocaleString();
 
-        const slotsOk = slots >= MIN_PARKING;
-        const budgetOk = total <= BUDGET_CEILING;
-        
-        document.getElementById("fail-parking").style.display = (slots > 0 && !slotsOk) ? "block" : "none";
-        const banner = document.getElementById("filter-banner");
+        const slotsOk  = slots >= MIN_PARKING;
+        const budgetOk = total > 0 && total <= BUDGET_CEILING;
 
-        if(slotsOk && budgetOk && total > 0) {
+        document.getElementById("fail-parking").style.display = (slots > 0 && !slotsOk) ? "block" : "none";
+
+        if (slotsOk && budgetOk) {
             banner.className = "filter-banner unlocked";
             banner.textContent = "✅ Filters Passed. Complete remaining sections.";
             unlockSections(true);
         } else {
             banner.className = "filter-banner blocked";
-            banner.textContent = (total > BUDGET_CEILING) ? "⛔ Over Budget Ceiling." : "⚠️ Minimum 10 slots and budget check required.";
+            if (total > BUDGET_CEILING) {
+                banner.textContent = "⛔ Over Budget Ceiling (KES " + Math.round(total).toLocaleString() + " / 500,000).";
+            } else {
+                banner.textContent = "⚠️ Minimum 10 parking slots and valid budget check required.";
+            }
             unlockSections(false);
         }
     }
@@ -416,73 +455,119 @@
         let ok = true;
         const mandatory = ["gla","rentPerSqFt","scPerSqFt","parkingSlots","buildingName","staffCapacity","boardroomCheck","ownerAgentName","phone","email"];
         mandatory.forEach(id => {
-            const el = document.getElementById(id);
-            const err = document.getElementById("err-" + (id === "staffCapacity" ? "staff" : id));
-            if(!v(id)) {
-                if(el) el.classList.add("error");
-                if(err) err.style.display = "block";
+            const el  = document.getElementById(id);
+            const errId = "err-" + (id === "staffCapacity" ? "staff" : id === "buildingName" ? "bname" : id);
+            const err = document.getElementById(errId);
+            if (!v(id)) {
+                if (el)  el.classList.add("error");
+                if (err) { err.style.display = "block"; err.classList.add("visible"); }
                 ok = false;
             } else {
-                if(el) el.classList.remove("error");
-                if(err) err.style.display = "none";
+                if (el)  el.classList.remove("error");
+                if (err) { err.style.display = "none"; err.classList.remove("visible"); }
             }
         });
 
-        if(r("powerBackup") === "None") ok = false;
-        // Staff and Boardroom check
-        if(v("staffCapacity") === "No" || v("boardroomCheck") === "No") ok = false;
+        // USD exchange rate required when USD selected
+        if (v("currency") === "USD") {
+            const rateEl  = document.getElementById("usdRate");
+            const rateErr = document.getElementById("err-usdrate");
+            const rate    = parseFloat(v("usdRate"));
+            if (!rate || rate <= 0) {
+                rateEl.classList.add("error");
+                rateErr.style.display = "block";
+                ok = false;
+            } else {
+                rateEl.classList.remove("error");
+                rateErr.style.display = "none";
+            }
+        }
+
+        // Parking fee required
+        if (!v("parkingFeePerSlot")) {
+            document.getElementById("parkingFeePerSlot").classList.add("error");
+            document.getElementById("err-parkfee").style.display = "block";
+            ok = false;
+        }
+
+        if (r("powerBackup") === "None") ok = false;
+        if (v("staffCapacity") === "No" || v("boardroomCheck") === "No") ok = false;
 
         return ok;
     }
 
+    // -------------------------------------------------------------------------
+    // BUG 1 & 7 FIX: payload now includes usdRate, parkingFeePerSlot, and all
+    // other fields that map to sheet columns (parkingArrangement, contactRole,
+    // node, buildingType, fitOutStatus, streetRoad, fibreAvailable)
+    // -------------------------------------------------------------------------
     function submitForm() {
-        if(!filtersPass) return;
-        if(!validate()) {
+        if (!filtersPass) return;
+        if (!validate()) {
             const firstErr = document.querySelector(".error, .hard-fail[style*='block']");
-            if(firstErr) firstErr.scrollIntoView({behavior:"smooth", block:"center"});
+            if (firstErr) firstErr.scrollIntoView({behavior:"smooth", block:"center"});
             return;
         }
 
-        const btn = document.getElementById("btn-submit");
+        const btn    = document.getElementById("btn-submit");
         const status = document.getElementById("submit-status");
         btn.disabled = true;
         status.style.display = "block";
         status.innerHTML = "Saving record...";
 
         const payload = {
-            gla: v("gla"),
-            rentPerSqFt: v("rentPerSqFt"),
-            scPerSqFt: v("scPerSqFt"),
-            parkingSlots: v("parkingSlots"),
-            currency: v("currency"),
-            buildingName: v("buildingName"),
-            staffCapacity: v("staffCapacity"),
+            // Section 2 — Financials (BUG 1 FIX: added usdRate & parkingFeePerSlot)
+            gla:                v("gla"),
+            rentPerSqFt:        v("rentPerSqFt"),
+            scPerSqFt:          v("scPerSqFt"),
+            parkingSlots:       v("parkingSlots"),
+            parkingFeePerSlot:  v("parkingFeePerSlot"),   // ← WAS MISSING
+            parkingArrangement: v("parkingArrangement"),  // ← WAS MISSING (col BA)
+            currency:           v("currency"),
+            usdRate:            v("currency") === "USD" ? v("usdRate") : "",  // ← WAS MISSING
+
+            // Section 1 — Identity (BUG 7 FIX: added missing fields)
+            buildingName:   v("buildingName"),
+            streetRoad:     v("streetRoad"),              // ← WAS MISSING (col H)
+            node:           v("node"),                    // ← WAS MISSING (col I)
+            buildingType:   v("buildingType"),            // ← WAS MISSING (col J)
+            fitOutStatus:   v("fitOutStatus"),            // ← WAS MISSING (col K)
+            staffCapacity:  v("staffCapacity"),
             boardroomCheck: v("boardroomCheck"),
-            powerBackup: r("powerBackup"),
-            fibreInSpace: v("fibreInSpace"),
+
+            // Section 3 — Technical
+            powerBackup:    r("powerBackup"),
+            fibreAvailable: r("fibreAvailable"),          // ← WAS MISSING (col AJ)
+            fibreInSpace:   v("fibreInSpace"),
+
+            // Section 4 — Contact
             ownerAgentName: v("ownerAgentName"),
-            agentMandate: r("agentMandate"),
-            phone: v("phone"),
-            email: v("email")
+            contactRole:    v("contactRole"),             // ← WAS MISSING (col AU)
+            agentMandate:   r("agentMandate"),
+            phone:          v("phone"),
+            email:          v("email")
         };
 
         fetch(GAS_URL, {
-            method: "POST",
-            mode: "no-cors",
+            method:  "POST",
+            mode:    "no-cors",
             headers: {"Content-Type": "text/plain"},
-            body: JSON.stringify(payload)
+            body:    JSON.stringify(payload)
         }).then(() => {
             status.innerHTML = "<div class='status-success'>✅ Record submitted successfully.</div>";
-        }).catch(err => {
+        }).catch(() => {
             status.innerHTML = "<div class='status-error'>❌ Submission failed. Try again.</div>";
             btn.disabled = false;
         });
     }
 
-    // Event listeners
-    ["gla","rentPerSqFt","scPerSqFt","parkingSlots","usdRate"].forEach(id => {
+    // -------------------------------------------------------------------------
+    // BUG 5 FIX: added "parkingFeePerSlot" to the calcBudget listener list
+    // -------------------------------------------------------------------------
+    ["gla","rentPerSqFt","scPerSqFt","parkingSlots","parkingFeePerSlot","usdRate"].forEach(id => {
         document.getElementById(id).addEventListener("input", calcBudget);
     });
+
     document.querySelectorAll("input, select").forEach(el => {
         el.addEventListener("change", updateProgress);
     });
