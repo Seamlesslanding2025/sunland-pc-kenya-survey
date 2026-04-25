@@ -1,1 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Office Property Submission — 2026 | Sunland Real Estates</title>
+    <style>
+        :root{--navy:#1a3c5e;--gold:#c9a84c;--green:#1e7e44;--red:#c0392b;--amber:#d68910;--light:#f4f6f9;--border:#d0d8e4;--text:#1a2433;--muted:#6b7a8d;--white:#ffffff;}
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--light);color:var(--text);font-size:14px;line-height:1.6;}
+        .site-header{background:var(--navy);color:var(--white);padding:16px 24px;display:flex;align-items:center;gap:14px;box-shadow:0 2px 8px rgba(0,0,0,.25);}
+        .site-header .logo{font-size:17px;font-weight:700;letter-spacing:.5px;}
+        .site-header .logo span{color:var(--gold);}
+        .site-header .badge{margin-left:auto;background:var(--gold);color:var(--navy);font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
+        .page-wrap{max-width:880px;margin:0 auto;padding:22px 16px 60px;}
+        .page-title{background:var(--white);border-left:5px solid var(--gold);border-radius:6px;padding:18px 22px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.08);}
+        .page-title h1{font-size:19px;color:var(--navy);font-weight:700;}
+        .page-title .sub{font-size:13px;color:var(--muted);margin-top:5px;}
+        .page-title .nodes{display:inline-block;background:var(--navy);color:var(--gold);font-size:12px;font-weight:700;padding:3px 10px;border-radius:4px;margin-top:8px;}
+        .progress-wrap{background:var(--white);border-radius:6px;padding:12px 18px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.08);}
+        .progress-label{font-size:12px;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between;}
+        .progress-bar{height:7px;background:var(--border);border-radius:4px;overflow:hidden;}
+        .progress-fill{height:100%;background:var(--green);border-radius:4px;transition:width .4s ease;width:0%;}
+        .budget-panel{background:var(--navy);color:var(--white);border-radius:8px;padding:16px 20px;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+        .budget-panel h3{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;color:var(--gold);}
+        .budget-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 20px;}
+        .budget-row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.1);font-size:13px;}
+        .budget-row.total{border-bottom:none;border-top:2px solid var(--gold);margin-top:6px;padding-top:8px;font-weight:700;font-size:15px;grid-column:1/-1;}
+        .budget-ceiling{margin-top:8px;font-size:11px;color:rgba(255,255,255,.65);text-align:right;grid-column:1/-1;}
+        .budget-ceiling span{color:var(--gold);font-weight:700;}
+        .filter-banner{border-radius:6px;padding:11px 16px;margin-bottom:18px;font-size:13px;font-weight:600;}
+        .filter-banner.blocked{background:#fdf2f2;border:1px solid #f5c6c6;color:var(--red);}
+        .filter-banner.unlocked{background:#edfaf3;border:1px solid #a9e4c2;color:var(--green);}
+        .filter-banner.warning{background:#fffbea;border:1px solid #f5e17a;color:var(--amber);}
+        .section-card{background:var(--white);border-radius:8px;margin-bottom:18px;box-shadow:0 1px 4px rgba(0,0,0,.08);overflow:visible;opacity:.4;pointer-events:none;transition:opacity .3s;}
+        .section-card.unlocked,.section-card.always-on{opacity:1;pointer-events:auto;}
+        .section-head{background:var(--navy);color:var(--white);padding:13px 20px;font-size:14px;font-weight:700;display:flex;align-items:center;gap:10px;}
+        .section-head .snum{background:var(--gold);color:var(--navy);width:23px;height:23px;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+        .section-body{padding:18px 20px;}
+        .field-group{margin-bottom:16px;}
+        label.field-label{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:var(--navy);margin-bottom:5px;}
+        label.field-label .req{color:var(--red);}
+        .tip-icon{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;background:var(--border);color:var(--muted);border-radius:50%;font-size:10px;font-weight:700;cursor:pointer;position:relative;flex-shrink:0;}
+        .tip-text{display:none;position:absolute;left:22px;top:-10px;background:var(--navy);color:var(--white);font-size:11px;font-weight:400;padding:10px 14px;border-radius:8px;width:240px;z-index:999;line-height:1.5;box-shadow:0 4px 12px rgba(0,0,0,.3);}
+        .tip-icon.active .tip-text{display:block;}
+        input[type=text],input[type=number],input[type=email],input[type=date],input[type=tel],input[type=url],select,textarea{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:5px;font-size:13px;color:var(--text);background:var(--white);transition:border-color .2s;font-family:inherit;}
+        input:focus,select:focus,textarea:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(26,60,94,.1);}
+        input.error,select.error,textarea.error{border-color:var(--red);background-color:#fff8f8;}
+        .field-error{font-size:11px;color:var(--red);margin-top:4px;display:none;}
+        .field-error.visible{display:block;}
+        .radio-group,.check-group{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px;}
+        .radio-opt,.check-opt{display:flex;align-items:center;gap:5px;background:var(--light);border:1px solid var(--border);border-radius:5px;padding:7px 12px;cursor:pointer;font-size:13px;transition:all .15s;}
+        .radio-opt:hover,.check-opt:hover{border-color:var(--navy);background:#eef3f9;}
+        .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+        .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+        @media(max-width:620px){.two-col,.three-col{grid-template-columns:1fr;}.budget-grid{grid-template-columns:1fr;}}
+        .conditional-block{background:#f8f9fb;border:1px solid var(--border);border-radius:6px;padding:13px 15px;margin-top:9px;display:none;}
+        .conditional-block.visible{display:block;}
+        .hard-fail{background:#fdf2f2;border:1px solid #f5c6c6;color:var(--red);border-radius:5px;padding:8px 12px;font-size:12px;font-weight:600;margin-top:6px;display:none;}
+        .hard-fail.visible{display:block;}
+        .mandate-alert{background:#fffbea;border:1px solid #f5e17a;color:var(--amber);border-radius:5px;padding:10px 14px;font-size:12px;font-weight:600;margin-top:8px;display:none;}
+        .mandate-alert.visible{display:block;}
+        .submit-area{background:var(--white);border-radius:8px;padding:25px;box-shadow:0 1px 4px rgba(0,0,0,.08);text-align:center;margin-top:20px;}
+        .btn-submit{background:var(--navy);color:var(--white);border:none;padding:14px 45px;font-size:16px;font-weight:700;border-radius:6px;cursor:pointer;transition:all .2s;}
+        .btn-submit:disabled{background:var(--muted);cursor:not-allowed;opacity:.6;}
+        #submit-status{margin-top:15px;font-size:14px;display:none;}
+        .status-success{background:#edfaf3;border:1px solid #a9e4c2;color:var(--green);border-radius:6px;padding:15px;font-weight:600;}
+        .status-error{background:#fdf2f2;border:1px solid #f5c6c6;color:var(--red);border-radius:6px;padding:15px;font-weight:600;}
+        .info-box{background:#eef3f9;border-left:4px solid var(--navy);border-radius:0 6px 6px 0;padding:10px 14px;font-size:12px;color:var(--navy);margin-bottom:15px;}
+    </style>
+</head>
+<body>
 
+<header class="site-header">
+    <div class="logo">Sunland <span>Real Estates</span> Ltd</div>
+    <div class="badge">Tool 1.1</div>
+</header>
+
+<div class="page-wrap">
+    <div class="page-title">
+        <h1>Office Property Submission — 2026</h1>
+        <div class="sub">Fill all fields marked <strong style="color:var(--red)">*</strong>. Properties that do not meet mandatory criteria cannot be submitted.</div>
+        <div class="nodes">📍 In-Scope Locations: Kilimani & Upper Hill Only</div>
+    </div>
+
+    <div class="progress-wrap">
+        <div class="progress-label"><span>Form Completion</span><span id="progress-pct">0%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+
+    <div class="budget-panel">
+        <h3>Live Budget Calculator <span id="usd-mode-label" style="display:none;font-size:10px;color:var(--gold);font-weight:400;margin-left:6px;">(USD → KES conversion active)</span></h3>
+        <div class="budget-grid">
+            <div class="budget-row"><span>Rent (KES/mo)</span><span id="calc-rent">—</span></div>
+            <div class="budget-row"><span>S/C (KES/mo)</span><span id="calc-sc">—</span></div>
+            <div class="budget-row"><span>Parking (KES/mo)</span><span id="calc-park">—</span></div>
+            <div class="budget-row"><span>VAT @ 16%</span><span id="calc-vat">—</span></div>
+            <div class="budget-row total"><span>TOTAL</span><span id="calc-total">—</span></div>
+            <div class="budget-ceiling">Budget Ceiling <span>KES 500,000 / month</span></div>
+        </div>
+    </div>
+
+    <div class="filter-banner warning" id="filter-banner">
+        ⚠️ Start with Section 2 — complete financials and parking to unlock the form.
+    </div>
+
+    <!-- SECTION 2 — FINANCIALS -->
+    <div class="section-card always-on">
+        <div class="section-head"><div class="snum">2</div>Section 2 — Financial Details</div>
+        <div class="section-body">
+            <div class="two-col">
+                <div class="field-group">
+                    <label class="field-label">GLA Available (sq ft) <span class="req">*</span>
+                        <span class="tip-icon" onclick="toggleTip(this)">?
+                            <span class="tip-text">Gross Lettable Area: Total floor area available for tenant use. Target is 2,800 - 3,500 sq ft.</span>
+                        </span>
+                    </label>
+                    <input type="number" id="gla" placeholder="e.g. 3000">
+                    <div class="field-error" id="err-gla">GLA is required.</div>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Rent per sq ft (<span id="lbl-rent-ccy">KES</span>) <span class="req">*</span></label>
+                    <input type="number" id="rentPerSqFt" step="0.01" placeholder="e.g. 110">
+                    <div class="field-error" id="err-rent">Rent is required.</div>
+                </div>
+            </div>
+            <div class="two-col">
+                <div class="field-group">
+                    <label class="field-label">S/C per sq ft (<span id="lbl-sc-ccy">KES</span>) <span class="req">*</span>
+                        <span class="tip-icon" onclick="toggleTip(this)">?
+                            <span class="tip-text">Service Charge: Monthly fee per sq ft covering maintenance and common services.</span>
+                        </span>
+                    </label>
+                    <input type="number" id="scPerSqFt" step="0.01" placeholder="e.g. 20">
+                    <div class="field-error" id="err-sc">S/C is required.</div>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Parking Slots Required <span class="req">*</span></label>
+                    <input type="number" id="parkingSlots" placeholder="Min: 10">
+                    <div class="field-error" id="err-slots">Number of slots is required.</div>
+                    <div class="hard-fail" id="fail-parking">⛔ Hard Filter Fail: Minimum 10 slots required.</div>
+                </div>
+            </div>
+            <div class="two-col">
+                <div class="field-group">
+                    <label class="field-label">Parking Fee per Slot (<span id="lbl-park-ccy">KES</span>) <span class="req">*</span></label>
+                    <input type="number" id="parkingFeePerSlot" placeholder="e.g. 5000">
+                    <div class="field-error" id="err-parkfee">Parking fee is required.</div>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Parking Arrangement <span class="req">*</span></label>
+                    <select id="parkingArrangement">
+                        <option value="">— Select —</option>
+                        <option value="Included in Rent">Included in Rent</option>
+                        <option value="Charged Separately">Charged Separately</option>
+                        <option value="Mixed">Mixed (Some Included, Extra Charged)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="two-col">
+                <div class="field-group">
+                    <label class="field-label">Currency <span class="req">*</span></label>
+                    <select id="currency" onchange="toggleUSD()">
+                        <option value="KES">KES — Kenyan Shilling</option>
+                        <option value="USD">USD — US Dollar</option>
+                    </select>
+                </div>
+                <div class="field-group" id="group-usd" style="display:none;">
+                    <label class="field-label">USD Exchange Rate <span class="req">*</span></label>
+                    <input type="number" id="usdRate" placeholder="e.g. 130">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 1 — IDENTITY -->
+    <div class="section-card" id="sec1">
+        <div class="section-head"><div class="snum">1</div>Section 1 — Building Identity & Capacity</div>
+        <div class="section-body">
+            <div class="two-col">
+                <div class="field-group">
+                    <label class="field-label">Building Name <span class="req">*</span></label>
+                    <input type="text" id="buildingName">
+                    <div class="field-error" id="err-bname">Building name is required.</div>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Street / Road <span class="req">*</span></label>
+                    <input type="text" id="streetRoad">
+                </div>
+            </div>
+            <div class="two-col">
+                <div class="field-group">
+                    <label class="field-label">Node <span class="req">*</span></label>
+                    <select id="node">
+                        <option value="">— Select —</option>
+                        <option value="Upper Hill">Upper Hill</option>
+                        <option value="Kilimani">Kilimani</option>
+                    </select>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Building Type <span class="req">*</span></label>
+                    <select id="buildingType">
+                        <option value="Grade A Office">Grade A Office</option>
+                        <option value="Grade B Office">Grade B Office</option>
+                        <option value="Mixed Use">Mixed Use</option>
+                        <option value="Standalone">Standalone Building</option>
+                    </select>
+                </div>
+            </div>
+            <!-- NEW CAPACITY FIELDS -->
+            <div class="two-col">
+                <div class="field-group">
+                    <label class="field-label">Suitability for 25 Staff? <span class="req">*</span>
+                        <span class="tip-icon" onclick="toggleTip(this)">?
+                            <span class="tip-text">Confirm the layout can accommodate 25 workstations comfortably.</span>
+                        </span>
+                    </label>
+                    <select id="staffCapacity">
+                        <option value="">— Select —</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                    <div class="field-error" id="err-staff">This is a mandatory requirement.</div>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Provision for Boardroom? <span class="req">*</span></label>
+                    <select id="boardroomCheck">
+                        <option value="">— Select —</option>
+                        <option value="Yes">Yes</option>
+                        <option value="No">No</option>
+                    </select>
+                    <div class="field-error" id="err-boardroom">This is a mandatory requirement.</div>
+                </div>
+            </div>
+            <div class="field-group">
+                <label class="field-label">Fit-Out Status <span class="req">*</span></label>
+                <select id="fitOutStatus">
+                    <option value="">— Select —</option>
+                    <option value="Plug-and-play">Plug-and-play (Fully Fitted)</option>
+                    <option value="Cat A">Cat A (Shell with ceilings/floors)</option>
+                    <option value="Shell & Core">Shell & Core (Bare Concrete)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 3 — TECHNICAL -->
+    <div class="section-card" id="sec3">
+        <div class="section-head"><div class="snum">3</div>Section 3 — Technical Infrastructure</div>
+        <div class="section-body">
+            <div class="field-group">
+                <label class="field-label">Power Backup <span class="req">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-opt"><input type="radio" name="powerBackup" value="Full Generator" onchange="handlePower()"> Full Generator</label>
+                    <label class="radio-opt"><input type="radio" name="powerBackup" value="Partial" onchange="handlePower()"> Partial</label>
+                    <label class="radio-opt"><input type="radio" name="powerBackup" value="None" onchange="handlePower()"> None</label>
+                </div>
+                <div class="hard-fail" id="fail-power">⛔ Hard Filter Fail: No power backup provided.</div>
+            </div>
+            <div class="field-group">
+                <label class="field-label">Fibre internet available? <span class="req">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-opt"><input type="radio" name="fibreAvailable" value="Yes"> Yes</label>
+                    <label class="radio-opt"><input type="radio" name="fibreAvailable" value="No"> No</label>
+                </div>
+            </div>
+            <div class="field-group">
+                <label class="field-label">Confirmed in Target Space? <span class="req">*</span>
+                    <span class="tip-icon" onclick="toggleTip(this)">?
+                        <span class="tip-text">Has the fibre optic cable been physically terminated inside the specific office unit being offered?</span>
+                    </span>
+                </label>
+                <select id="fibreInSpace">
+                    <option value="">— Select —</option>
+                    <option value="Yes">Yes — Inside Space</option>
+                    <option value="No">No — Building Only</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 4 — CONTACT -->
+    <div class="section-card" id="sec4">
+        <div class="section-head"><div class="snum">4</div>Section 4 — Contact & Mandate</div>
+        <div class="section-body">
+            <div class="two-col">
+                <div class="field-group">
+                    <label class="field-label">Owner / Agent Name <span class="req">*</span></label>
+                    <input type="text" id="ownerAgentName">
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Contact Role <span class="req">*</span></label>
+                    <select id="contactRole" onchange="toggleMandate()">
+                        <option value="Landlord">Landlord</option>
+                        <option value="Agent">Letting Agent</option>
+                    </select>
+                </div>
+            </div>
+            <div class="conditional-block" id="block-mandate">
+                <label class="field-label">Written mandate from Landlord? <span class="req">*</span></label>
+                <div class="radio-group">
+                    <label class="radio-opt"><input type="radio" name="agentMandate" value="Yes" onchange="checkMandate()"> Yes</label>
+                    <label class="radio-opt"><input type="radio" name="agentMandate" value="No" onchange="checkMandate()"> No / Referral</label>
+                </div>
+                <div class="mandate-alert" id="mandate-alert">⚠️ Note: Agent mandate is required to proceed to the Shortlist. Please secure this by Monday.</div>
+            </div>
+            <div class="two-col" style="margin-top:15px;">
+                <div class="field-group">
+                    <label class="field-label">Phone <span class="req">*</span></label>
+                    <input type="tel" id="phone" placeholder="07XX XXX XXX">
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Email <span class="req">*</span></label>
+                    <input type="email" id="email">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="submit-area">
+        <button class="btn-submit" id="btn-submit" onclick="submitForm()">Submit Property Record</button>
+        <div id="submit-status"></div>
+    </div>
+</div>
+
+<script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwAhe8gzy-2NMAsjdkVBzA5_JQw_n7515kM1PfGcCTLWpbmVALU2yAwKg4PMHAb96Zzuw/exec";
+    const BUDGET_CEILING = 500000;
+    const MIN_PARKING = 10;
+    let filtersPass = false;
+
+    // Mobile-friendly Tip Toggle
+    function toggleTip(el) {
+        // Close other tips
+        document.querySelectorAll('.tip-icon').forEach(icon => {
+            if(icon !== el) icon.classList.remove('active');
+        });
+        el.classList.toggle('active');
+    }
+
+    function v(id) { const e=document.getElementById(id); return e?e.value.trim():""; }
+    function r(nm) { const e=document.querySelector(`input[name="${nm}"]:checked`); return e?e.value:""; }
+
+    function toggleUSD() {
+        const ccy = v("currency");
+        document.getElementById("group-usd").style.display = (ccy === "USD") ? "block" : "none";
+        document.getElementById("usd-mode-label").style.display = (ccy === "USD") ? "inline" : "none";
+        calcBudget();
+    }
+
+    function calcBudget() {
+        const fx = (v("currency") === "USD") ? (parseFloat(v("usdRate")) || 1) : 1;
+        const gla = parseFloat(v("gla")) || 0;
+        const rent = (parseFloat(v("rentPerSqFt")) || 0) * fx;
+        const sc = (parseFloat(v("scPerSqFt")) || 0) * fx;
+        const slots = parseInt(v("parkingSlots")) || 0;
+        const fee = (parseFloat(v("parkingFeePerSlot")) || 0) * fx;
+        
+        const mRent = gla * rent;
+        const mSC = gla * sc;
+        const mPark = slots * fee;
+        const total = (mRent + mSC + mPark) * 1.16;
+
+        document.getElementById("calc-rent").textContent = "KES " + Math.round(mRent).toLocaleString();
+        document.getElementById("calc-sc").textContent = "KES " + Math.round(mSC).toLocaleString();
+        document.getElementById("calc-park").textContent = "KES " + Math.round(mPark).toLocaleString();
+        document.getElementById("calc-vat").textContent = "KES " + Math.round((mRent+mSC+mPark)*0.16).toLocaleString();
+        document.getElementById("calc-total").textContent = "KES " + Math.round(total).toLocaleString();
+
+        const slotsOk = slots >= MIN_PARKING;
+        const budgetOk = total <= BUDGET_CEILING;
+        
+        document.getElementById("fail-parking").style.display = (slots > 0 && !slotsOk) ? "block" : "none";
+        const banner = document.getElementById("filter-banner");
+
+        if(slotsOk && budgetOk && total > 0) {
+            banner.className = "filter-banner unlocked";
+            banner.textContent = "✅ Filters Passed. Complete remaining sections.";
+            unlockSections(true);
+        } else {
+            banner.className = "filter-banner blocked";
+            banner.textContent = (total > BUDGET_CEILING) ? "⛔ Over Budget Ceiling." : "⚠️ Minimum 10 slots and budget check required.";
+            unlockSections(false);
+        }
+    }
+
+    function unlockSections(on) {
+        ["sec1","sec3","sec4"].forEach(id => document.getElementById(id).classList.toggle("unlocked", on));
+        filtersPass = on;
+        document.getElementById("btn-submit").disabled = !on;
+    }
+
+    function handlePower() {
+        const val = r("powerBackup");
+        document.getElementById("fail-power").style.display = (val === "None") ? "block" : "none";
+    }
+
+    function toggleMandate() {
+        document.getElementById("block-mandate").classList.toggle("visible", v("contactRole") === "Agent");
+    }
+
+    function checkMandate() {
+        document.getElementById("mandate-alert").classList.toggle("visible", r("agentMandate") === "No");
+    }
+
+    function updateProgress() {
+        const fields = ["gla","rentPerSqFt","scPerSqFt","parkingSlots","buildingName","staffCapacity","boardroomCheck","ownerAgentName","phone","email"];
+        let done = 0;
+        fields.forEach(id => { if(v(id)) done++; });
+        const pct = Math.round((done / fields.length) * 100);
+        document.getElementById("progress-fill").style.width = pct + "%";
+        document.getElementById("progress-pct").textContent = pct + "%";
+    }
+
+    function validate() {
+        let ok = true;
+        const mandatory = ["gla","rentPerSqFt","scPerSqFt","parkingSlots","buildingName","staffCapacity","boardroomCheck","ownerAgentName","phone","email"];
+        mandatory.forEach(id => {
+            const el = document.getElementById(id);
+            const err = document.getElementById("err-" + (id === "staffCapacity" ? "staff" : id));
+            if(!v(id)) {
+                if(el) el.classList.add("error");
+                if(err) err.style.display = "block";
+                ok = false;
+            } else {
+                if(el) el.classList.remove("error");
+                if(err) err.style.display = "none";
+            }
+        });
+
+        if(r("powerBackup") === "None") ok = false;
+        // Staff and Boardroom check
+        if(v("staffCapacity") === "No" || v("boardroomCheck") === "No") ok = false;
+
+        return ok;
+    }
+
+    function submitForm() {
+        if(!filtersPass) return;
+        if(!validate()) {
+            const firstErr = document.querySelector(".error, .hard-fail[style*='block']");
+            if(firstErr) firstErr.scrollIntoView({behavior:"smooth", block:"center"});
+            return;
+        }
+
+        const btn = document.getElementById("btn-submit");
+        const status = document.getElementById("submit-status");
+        btn.disabled = true;
+        status.style.display = "block";
+        status.innerHTML = "Saving record...";
+
+        const payload = {
+            gla: v("gla"),
+            rentPerSqFt: v("rentPerSqFt"),
+            scPerSqFt: v("scPerSqFt"),
+            parkingSlots: v("parkingSlots"),
+            currency: v("currency"),
+            buildingName: v("buildingName"),
+            staffCapacity: v("staffCapacity"),
+            boardroomCheck: v("boardroomCheck"),
+            powerBackup: r("powerBackup"),
+            fibreInSpace: v("fibreInSpace"),
+            ownerAgentName: v("ownerAgentName"),
+            agentMandate: r("agentMandate"),
+            phone: v("phone"),
+            email: v("email")
+        };
+
+        fetch(GAS_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {"Content-Type": "text/plain"},
+            body: JSON.stringify(payload)
+        }).then(() => {
+            status.innerHTML = "<div class='status-success'>✅ Record submitted successfully.</div>";
+        }).catch(err => {
+            status.innerHTML = "<div class='status-error'>❌ Submission failed. Try again.</div>";
+            btn.disabled = false;
+        });
+    }
+
+    // Event listeners
+    ["gla","rentPerSqFt","scPerSqFt","parkingSlots","usdRate"].forEach(id => {
+        document.getElementById(id).addEventListener("input", calcBudget);
+    });
+    document.querySelectorAll("input, select").forEach(el => {
+        el.addEventListener("change", updateProgress);
+    });
+</script>
+</body>
+</html>
